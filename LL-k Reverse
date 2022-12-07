@@ -1,0 +1,85 @@
+import java.util.*;
+
+class Node
+{
+    int data;
+    Node next;
+ 
+    Node(int data, Node next)
+    {
+        this.data = data;
+        this.next = next;
+    }
+ 
+    public void print()
+    {
+        Node ptr = this;
+        while (ptr != null)
+        {
+            System.out.print(ptr.data + " ");
+            ptr = ptr.next;
+        }
+        
+    }
+}
+ 
+public class Main
+{
+    public static Node reverseInGroups(Node head, int k)
+    {
+        if (head == null) {
+            return null;
+        }
+ 
+        Node current = head;
+ 
+        Node prev = null;
+        int count = 0;
+ 
+        // iterate through the list and move/insert each node
+        // in front of the result list (like a push of the node)
+        while (current != null && count++ < k)
+        {
+            // tricky: note the next node
+            Node next = current.next;
+ 
+            // move the current node onto the result
+            current.next = prev;
+ 
+            // update the previous pointer to the current node
+            prev = current;
+ 
+            // move to the next node in the list
+            current = next;
+        }
+ 
+        // recur for remaining nodes
+        head.next = reverseInGroups(current, k);
+ 
+        // it is important to return the previous node
+        // (to link every group of `k` nodes)
+        return prev;
+    }
+ 
+    public static void main(String[] args)
+    {
+        // input keys
+        Scanner sc = new Scanner(System.in);
+        int n =sc.nextInt();
+        int k = sc.nextInt();
+        int [] keys = new int[n];
+        
+        for(int i=0;i<n;i++){
+            keys[i]=sc.nextInt();
+        }
+    
+        Node head = null;
+   
+        for (int i = n - 1; i >= 0; i--) {
+            head = new Node(keys[i], head);
+        }
+ 
+        head = reverseInGroups(head, k);
+        head.print();
+    }
+}
